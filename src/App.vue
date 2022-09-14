@@ -1,26 +1,36 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<div class="main-box">
+   <LeftBox></LeftBox>
+  <RightBox></RightBox>
+</div>
+
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import LeftBox from '@/components/LeftBox'
+import RightBox from '@/components/RightBox'
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    LeftBox,
+    RightBox
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+*{
+  margin: 0;
+  padding: 0;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+.main-box{
+  position: absolute;
+  left: calc(50% - 517px);
+  top: calc(50% - 290px);
+  display: flex;
+  width: 1035px;
+  height: 580px;
 }
 </style>
