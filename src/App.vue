@@ -1,7 +1,7 @@
 <template>
 <div class="main-box">
-   <LeftBox></LeftBox>
-  <RightBox></RightBox>
+   <LeftBox :imgNumber="imgNumber"></LeftBox>
+  <RightBox :numberChange="numberChange"></RightBox>
 </div>
 
 
@@ -10,11 +10,22 @@
 <script>
 import LeftBox from '@/components/LeftBox'
 import RightBox from '@/components/RightBox'
+import {ref} from 'vue'
 export default {
   name: 'App',
   components: {
     LeftBox,
     RightBox
+  },
+  setup(){
+    const imgNumber = ref(1)
+    function numberChange(number){
+      imgNumber.value = number
+    }
+    return{
+      imgNumber,
+      numberChange
+    }
   }
 }
 </script>

@@ -1,5 +1,9 @@
 <template>
   <div class="left-box">
+    <img ref="backImageBox" class="back-image" :src="backImage.imgSrc[backImage.imgSrcNumber]" alt="1111"/>
+    <div class="subject-name-box"></div>
+    <div class="triangle-right"></div>
+    <div class="triangle-left"></div>
     <div class="min-people-box">
       <div class="min-people-top">
         <div class="min-people-top-box"></div>
@@ -11,7 +15,7 @@
       </div>
     </div>
     <!--    时装简介-->
-    <div class="intro-box">
+    <div class="intro-box" ref="introBox">
       <ul class="intro-title-box">
         <li class="intro-main-title">EPOQUE</li>
         <li class="intro-minor-title">NEW ARRIVALS</li>
@@ -23,6 +27,13 @@
       </ul>
       <div class="intro-right-box"></div>
     </div>
+    <!--    色彩条-->
+    <ul class="color-lists">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
     <!--    头像-->
     <div class="head-portrait-box">
       <div></div>
@@ -37,21 +48,117 @@
 </template>
 
 <script>
+import {ref,reactive,watch,computed} from 'vue'
+
 export default {
-  name: "LeftBox"
+  name: "LeftBox",
+  props:['imgNumber'],
+  setup(props) {
+    const introBox = ref()
+    const backImageBox = ref()
+    const backImage = reactive({
+      imgSrcNumber:1,
+      imgSrc: [
+        require('@/assets/img/赤东-皮肤.png'),
+        require('@/assets/img/史尔特尔-皮肤.png'),
+        require('@/assets/img/羽毛笔-皮肤.png'),
+        require('@/assets/img/赤东-皮肤.png'),
+        require('@/assets/img/史尔特尔-皮肤.png'),
+      ]
+    })
+    const NumberChange = computed(()=>{
+      return props.imgNumber
+    })
+    watch(NumberChange,(newValue,oldValue)=>{
+      // 右下角介绍框移动
+      introBox.value.style.right = '-100%'
+      setTimeout(()=>{
+        introBox.value.style.right = '26px'
+      },500)
+      // 图片变化
+      backImageBox.value.style.top = '100%'
+      setTimeout(()=>{
+        backImageBox.value.style.top = '-5%'
+        backImage.imgSrcNumber = newValue
+      },200)
+      console.log(introBox.value.style.right)
+      console.log(newValue,oldValue)
+    })
+    return {
+      introBox,
+      backImageBox,
+      backImage,
+      NumberChange
+    }
+
+  }
 }
 </script>
 
 <style scoped>
 .left-box {
   position: relative;
-  background: aquamarine;
+  background: rgb(173, 173, 173);
   width: 650px;
   height: 580px;
+  overflow: hidden;
+}
+
+.back-image {
+  position: absolute;
+  z-index: 2;
+  top: -5%;
+  left: -5px;
+  height: 112%;
+  transition: 0.5s;
+}
+
+.subject-name-box {
+  position: absolute;
+  top: 120px;
+  left: 18px;
+  z-index: 1;
+  height: 80px;
+  width: 150px;
+  background: rgba(255, 255, 255, 0.44);
+}
+
+.triangle-left {
+  position: absolute;
+  left: 0;
+  top: -222px;
+  border-width: 222px 390px 222px 390px;
+  border-style: solid;
+  border-color: transparent;
+  border-left-color: rgb(111, 140, 154);
+  animation: ceshi 1s;
+}
+
+@keyframes ceshi {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.triangle-right {
+  position: absolute;
+  right: 0;
+  top: -222px;
+  border-width: 222px 390px 222px 390px;
+  border-style: solid;
+  border-color: transparent;
+  border-right-color: rgb(222, 222, 222);
 }
 
 .min-people-box {
   position: absolute;
+  z-index: 4;
   left: 30px;
   top: 308px;
   height: 136px;
@@ -110,12 +217,14 @@ export default {
 /*右下角介绍框*/
 .intro-box {
   position: absolute;
+  z-index: 4;
   right: 26px;
   bottom: 18px;
   display: flex;
   height: 170px;
   width: 190px;
   background: rgb(43, 80, 109);
+  transition: 0.5s;
 }
 
 .intro-title-box {
@@ -159,6 +268,37 @@ export default {
   color: white;
 }
 
+.color-lists {
+  height: 170px;
+  width: 3px;
+  position: absolute;
+  z-index: 4;
+  right: 14px;
+  bottom: 18px;
+  list-style: none;
+}
+
+.color-lists li {
+  height: 25%;
+  width: 100%;
+}
+
+.color-lists li:nth-child(1) {
+  background: rgb(0, 255, 255);
+}
+
+.color-lists li:nth-child(2) {
+  background: rgb(255, 0, 255);
+}
+
+.color-lists li:nth-child(3) {
+  background: rgb(255, 255, 0);
+}
+
+.color-lists li:nth-child(4) {
+  background: rgb(0, 0, 0);
+}
+
 .intro-right-box {
   width: 18px;
   height: 100%;
@@ -170,6 +310,7 @@ export default {
   height: 110px;
   width: 110px;
   position: absolute;
+  z-index: 4;
   right: 26px;
   top: 40px;
 }
@@ -186,6 +327,7 @@ export default {
   height: 220px;
   width: 110px;
   position: absolute;
+  z-index: 4;
   right: 26px;
   top: 162px;
 }
