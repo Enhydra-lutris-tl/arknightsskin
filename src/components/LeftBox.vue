@@ -1,15 +1,16 @@
 <template>
   <div class="left-box">
     <img ref="backImageBox" class="back-image" :src="backImage.imgSrc[backImage.imgSrcNumber]" alt="1111"/>
-    <div class="subject-name-box"></div>
+    <div class="subject-name-box" ref="subjectNameBox"></div>
     <div class="triangle-right"></div>
-    <div class="triangle-left"></div>
+    <div class="triangle-left one" ref="triangleOne"></div>
+    <div class="triangle-left two" ref="triangleTwo"></div>
     <div class="min-people-box">
-      <div class="min-people-top">
+      <div class="min-people-top" ref="minPeopleTop">
         <div class="min-people-top-box"></div>
         <div class="min-people-top-box"></div>
       </div>
-      <div class="min-people-bottom">
+      <div class="min-people-bottom" ref="minPeopleBottom">
         <div class="min-people-bottom-box"></div>
         <div class="min-people-bottom-box"></div>
       </div>
@@ -28,19 +29,19 @@
       <div class="intro-right-box"></div>
     </div>
     <!--    色彩条-->
-    <ul class="color-lists">
+    <ul class="color-lists" ref="colorLists">
       <li></li>
       <li></li>
       <li></li>
       <li></li>
     </ul>
     <!--    头像-->
-    <div class="head-portrait-box">
+    <div class="head-portrait-box" ref="headPortraitBox">
       <div></div>
       <div class="head-portrait"></div>
     </div>
     <!--    半身像-->
-    <div class="bust-box">
+    <div class="bust-box" ref="bustBox">
       <div></div>
       <div class="bust"></div>
     </div>
@@ -48,43 +49,112 @@
 </template>
 
 <script>
-import {ref,reactive,watch,computed} from 'vue'
+import {ref, reactive, watch, computed} from 'vue'
 
 export default {
   name: "LeftBox",
-  props:['imgNumber'],
+  props: ['imgNumber'],
   setup(props) {
+    // dom元素
+    const triangleOne = ref()
+    const triangleTwo = ref()
+    const subjectNameBox = ref()
+    const minPeopleTop = ref()
+    const minPeopleBottom = ref()
+    const bustBox = ref()
+    const headPortraitBox = ref()
+    const colorLists = ref()
     const introBox = ref()
     const backImageBox = ref()
+    // 数据
     const backImage = reactive({
-      imgSrcNumber:1,
+      imgSrcNumber: 1,
       imgSrc: [
         require('@/assets/img/赤东-皮肤.png'),
         require('@/assets/img/史尔特尔-皮肤.png'),
         require('@/assets/img/羽毛笔-皮肤.png'),
-        require('@/assets/img/赤东-皮肤.png'),
-        require('@/assets/img/史尔特尔-皮肤.png'),
+        require('@/assets/img/铃兰-皮肤.png'),
+        require('@/assets/img/罗小黑-皮肤.png'),
       ]
     })
-    const NumberChange = computed(()=>{
+    const NumberChange = computed(() => {
       return props.imgNumber
     })
-    watch(NumberChange,(newValue,oldValue)=>{
-      // 右下角介绍框移动
+    // 函数
+    // 框体移动
+    function rightBottomChange() {
+      // 皮肤系列名移动
+      subjectNameBox.value.style.left = '-200px'
+      // 左上颜色块移动
+      minPeopleTop.value.style.left = '-200px'
+      minPeopleTop.value.style.top = '-200px'
+      // 右下颜色块移动
+      minPeopleBottom.value.style.right = '-300px'
+      minPeopleBottom.value.style.bottom = '-300px'
+      // 其他框体移动
+      bustBox.value.style.right = '-100%'
+      headPortraitBox.value.style.right = '-100%'
       introBox.value.style.right = '-100%'
-      setTimeout(()=>{
+      colorLists.value.style.bottom = '-170px'
+      setTimeout(() => {
+        subjectNameBox.value.style.left = '18px'
         introBox.value.style.right = '26px'
-      },500)
+        colorLists.value.style.bottom = '18px'
+      }, 200)
+
+      setTimeout(() => {
+        bustBox.value.style.right = '26px'
+        headPortraitBox.value.style.right = '26px'
+
+        minPeopleTop.value.style.left = '0'
+        minPeopleTop.value.style.top = '0'
+
+        minPeopleBottom.value.style.right = '0'
+        minPeopleBottom.value.style.bottom = '0'
+      }, 400)
+
+    }
+
+    // function BackImgChange(){
+    //
+    // }
+    watch(NumberChange, (newValue) => {
+      rightBottomChange()
       // 图片变化
+      if (newValue % 2 === 1) {
+        triangleOne.value.style.transform = 'rotate(0)'
+        triangleOne.value.style.zIndex = '1'
+        triangleTwo.value.style.zIndex = '0'
+        setTimeout(() => {
+          triangleTwo.value.style.transform = 'rotate(30deg)'
+        }, 500)
+
+      } else {
+        triangleTwo.value.style.transform = 'rotate(0)'
+        triangleOne.value.style.zIndex = '0'
+        triangleTwo.value.style.zIndex = '1'
+        setTimeout(() => {
+          triangleOne.value.style.transform = 'rotate(30deg)'
+        }, 500)
+
+
+      }
+
       backImageBox.value.style.top = '100%'
-      setTimeout(()=>{
+      setTimeout(() => {
         backImageBox.value.style.top = '-5%'
         backImage.imgSrcNumber = newValue
-      },200)
-      console.log(introBox.value.style.right)
-      console.log(newValue,oldValue)
+      }, 200)
     })
     return {
+      triangleOne,
+      triangleTwo,
+      subjectNameBox,
+      minPeopleTop,
+      minPeopleBottom,
+      bustBox,
+      headPortraitBox,
+      colorLists,
       introBox,
       backImageBox,
       backImage,
@@ -106,7 +176,7 @@ export default {
 
 .back-image {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   top: -5%;
   left: -5px;
   height: 112%;
@@ -117,10 +187,11 @@ export default {
   position: absolute;
   top: 120px;
   left: 18px;
-  z-index: 1;
+  z-index: 2;
   height: 80px;
   width: 150px;
   background: rgba(255, 255, 255, 0.44);
+  transition: 0.3s;
 }
 
 .triangle-left {
@@ -131,19 +202,13 @@ export default {
   border-style: solid;
   border-color: transparent;
   border-left-color: rgb(111, 140, 154);
-  animation: ceshi 1s;
+  transition: 0.6s;
 }
 
-@keyframes ceshi {
-  0% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(30deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
+.triangle-left.two {
+  z-index: 1;
+  border-left-color: rgb(223, 70, 21);
+  transform: rotate(30deg);
 }
 
 .triangle-right {
@@ -188,12 +253,14 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
+  transition: 0.5s;
 }
 
 .min-people-bottom {
   position: absolute;
   bottom: 0;
   right: 0;
+  transition: 0.5s;
 }
 
 .min-people-bottom-box:first-child {
@@ -224,7 +291,7 @@ export default {
   height: 170px;
   width: 190px;
   background: rgb(43, 80, 109);
-  transition: 0.5s;
+  transition: 0.3s;
 }
 
 .intro-title-box {
@@ -276,6 +343,7 @@ export default {
   right: 14px;
   bottom: 18px;
   list-style: none;
+  transition: 0.3s;
 }
 
 .color-lists li {
@@ -313,6 +381,7 @@ export default {
   z-index: 4;
   right: 26px;
   top: 40px;
+  transition: 0.5s;
 }
 
 .head-portrait-box div:first-child {
@@ -330,6 +399,7 @@ export default {
   z-index: 4;
   right: 26px;
   top: 162px;
+  transition: 0.5s;
 }
 
 .bust-box div:first-child {

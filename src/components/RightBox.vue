@@ -32,11 +32,11 @@ export default {
     const listImage = reactive({
       listNumber: 1,
       imgSrc: [
-          require('@/assets/img/赤东-皮肤.jpg'),
-          require('@/assets/img/史尔特尔-皮肤.png'),
-          require('@/assets/img/羽毛笔-皮肤.png'),
-          require('@/assets/img/赤东-皮肤.jpg'),
-          require('@/assets/img/史尔特尔-皮肤.png'),
+        require('@/assets/img/赤东-皮肤.png'),
+        require('@/assets/img/史尔特尔-皮肤.png'),
+        require('@/assets/img/羽毛笔-皮肤.png'),
+        require('@/assets/img/铃兰-皮肤.png'),
+        require('@/assets/img/罗小黑-皮肤.png'),
       ]
     })
 
